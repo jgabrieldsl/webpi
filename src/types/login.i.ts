@@ -13,11 +13,24 @@ export interface WelcomeTextProps {
   description: string
 }
 
-export interface ModalQrCodeProps {
+export interface SuperIDAppButtonProps {
   iconSrc: string
   buttonText: string
   dialogTitle: string
   dialogDescription: string
+}
+
+export interface InputFieldProps {
+  type: string
+  placeholder: string
+  value?: string
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+}
+
+export interface PasswordInputProps {
+  showPassword: boolean
+  togglePassword: () => void
+  placeholder: string
 }
 
 export interface SubmitButtonProps {
