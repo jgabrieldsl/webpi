@@ -1,4 +1,3 @@
-import React from "react";
 import SuperIDWebLogin from "./components/SuperIDWebLogin";
 
 function App() {
