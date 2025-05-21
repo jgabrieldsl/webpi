@@ -13,14 +13,15 @@ const SuperIDWebLogin = () => {
   const [showPassword, setShowPassword] = useState(false)
 
   return (
-    <div className="w-screen h-screen flex bg-white">
-      {/* Left side - gray area */}
-      <div className="w-1/2 flex">
-        <div className="flex w-full h-full min-h-screen bg-[#D9D9D9]"></div>
+    <div className="w-screen h-screen flex flex-col md:flex-row bg-white">
+     {/* Left side - gray area */}
+      <div className="hidden md:flex w-full md:w-1/2">
+        <div className="flex w-full h-full min-h-screen bg-[#4500C9]"></div>
       </div>
 
+
       {/* Right side - login form */}
-      <div className="flex w-1/2 items-center justify-center bg-white md:p-12 lg:p-16 xl:p-24">
+      <div className="flex  w-full md:w-1/2  items-center justify-center bg-white p-12">
         <div className="flex flex-col justify-start w-full max-w-md mx-auto">
           {/* Logo */}
           <img
@@ -32,7 +33,7 @@ const SuperIDWebLogin = () => {
           <div className="flex flex-col items-stretch justify-center w-full mt-8">
             <div className="flex flex-col items-stretch justify-start w-full">
               {/* Welcome text */}
-              <div className="flex flex-col items-stretch justify-center self-start">
+              <div className="flex flex-col items-stretch justify-center self-start mb-8">
                 <h1 className="text-2xl font-bold leading-tight tracking-tight text-[#1E232C]">
                   Bem vindo de volta ao SuperID Web
                 </h1>
@@ -44,9 +45,9 @@ const SuperIDWebLogin = () => {
               {/* SuperID App login button */}
               
                   
-                  <Dialog>
+                <Dialog>
                   <DialogTrigger>
-                    <button className="flex items-center justify-center gap-3 w-full mt-8 px-8 py-3 text-base text-center text-[#8391A1] font-normal border border-solid border-[#4600c9] rounded-full">
+                    <button className="flex items-center justify-center gap-3 w-full px-8 py-3 text-base text-center text-[#8391A1] font-normal border border-solid border-[#4600c9] rounded-full">
                       <img
                         src="/ic_launcher-playstore 2.png"
                         className="w-6 h-6 object-contain object-center rounded-full"
