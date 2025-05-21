@@ -1,9 +1,12 @@
-import React from 'react'
-import { RouterProvider } from 'react-router-dom'
-import router from './routes'
+import React from "react";
+import SuperIDWebLogin from "./components/SuperIDWebLogin";
 
-const App: React.FC = () => {
- return <RouterProvider router={router} />;
+function App() {
+  return (
+    <div className="overflow-x-hidden">
+      <SuperIDWebLogin />
+    </div>
+  );
 }
 
-export default App
+export default App;

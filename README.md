@@ -1,73 +1,54 @@
-# SuperID Web
+# React + TypeScript + Vite
 
-Bem-vindo ao **SuperID Web**!  
-Uma aplicação moderna de login web construída com React, TypeScript, Vite e Tailwind CSS.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-![SuperID Web Screenshot](public/ic_launcher-playstore%202.png)
+Currently, two official plugins are available:
 
-## ✨ Tecnologias Utilizadas
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-- [React](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/)
-- [Vite](https://vitejs.dev/) para build e desenvolvimento rápido
-- [Tailwind CSS](https://tailwindcss.com/) para estilização moderna
-- [Radix UI](https://www.radix-ui.com/) para componentes acessíveis
-- [Lucide Icons](https://lucide.dev/) para ícones
-- ESLint + TypeScript para qualidade de código
+## Expanding the ESLint configuration
 
-## 🚀 Como rodar o projeto
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-1. **Clone o repositório**
-   ```sh
-   git clone https://github.com/seu-usuario/superid-web.git
-   cd superid-web
-   ```
-
-2. **Instale as dependências**
-   ```sh
-   npm install
-   ```
-
-3. **Inicie o servidor de desenvolvimento**
-   ```sh
-   npm run dev
-   ```
-
-4. Acesse [http://localhost:5173](http://localhost:5173) no seu navegador.
-
-## 📦 Scripts Disponíveis
-
-- `npm run dev` — inicia o ambiente de desenvolvimento
-- `npm run build` — gera a build de produção
-- `npm run preview` — pré-visualiza a build de produção
-- `npm run lint` — executa o linter
-
-## 🖥️ Estrutura do Projeto
-
-```
-src/
-  App.tsx                # Componente principal
-  main.tsx               # Ponto de entrada
-  components/
-    SuperIDWebLogin.tsx  # Tela de login customizada
-    ui/                  # Componentes de UI reutilizáveis
-  lib/
-    utils.ts             # Funções utilitárias
-public/
-  ic_launcher-playstore 2.png  # Logo do app
-  eyeicon.png                 # Ícone de mostrar/ocultar senha
+```js
+export default tseslint.config({
+  extends: [
+    // Remove ...tseslint.configs.recommended and replace with this
+    ...tseslint.configs.recommendedTypeChecked,
+    // Alternatively, use this for stricter rules
+    ...tseslint.configs.strictTypeChecked,
+    // Optionally, add this for stylistic rules
+    ...tseslint.configs.stylisticTypeChecked,
+  ],
+  languageOptions: {
+    // other options...
+    parserOptions: {
+      project: ['./tsconfig.node.json', './tsconfig.app.json'],
+      tsconfigRootDir: import.meta.dirname,
+    },
+  },
+})
 ```
 
-## 💡 Funcionalidades
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-- Login via SuperID App (com QR Code)
-- Login tradicional por e-mail e senha
-- Interface responsiva e moderna
-- Componentes reutilizáveis e acessíveis
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
 
-## 📝 Licença
-
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
-
----
-
-Feito com 💜
+export default tseslint.config({
+  plugins: {
+    // Add the react-x and react-dom plugins
+    'react-x': reactX,
+    'react-dom': reactDom,
+  },
+  rules: {
+    // other rules...
+    // Enable its recommended typescript rules
+    ...reactX.configs['recommended-typescript'].rules,
+    ...reactDom.configs.recommended.rules,
+  },
+})
+```
