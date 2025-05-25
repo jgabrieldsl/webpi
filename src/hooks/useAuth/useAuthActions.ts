@@ -1,9 +1,6 @@
 import axios from 'axios'
 import jsQR from 'jsqr'
 import { useAuthState } from './useAuthState'
-import { loginUser } from '@/firebase'
-import { useNavigate } from 'react-router-dom'
-import decryptPassword from '@/lib/descripty'
 
 let pollingInterval: NodeJS.Timeout | null = null
 
@@ -19,8 +16,6 @@ export const useAuthActions = () => {
     setPassword,
     resetAuthState,
   } = useAuthState.getState()
-
-  const navigate = useNavigate()
 
   const generateQRCode = async (partnerSite: string, apiKey: string) => {
     setIsLoading(true)
@@ -51,7 +46,7 @@ export const useAuthActions = () => {
           const code = jsQR(imageData.data, imageData.width, imageData.height)
           if (code) {
             setLoginToken(code.data)
-            startPolling()
+            startPolling(code.data)
           } else {
             setError('Falha ao extrair loginToken do QR Code')
             setIsLoading(false)
@@ -84,22 +79,11 @@ export const useAuthActions = () => {
 
       const { userUID, username, password, loginTime } = response.data
       if (userUID && username && password && loginTime) {
+        setIsAuthenticated(true)
         setUserUID(userUID)
         setUsername(username)
         setPassword(password)
         setIsLoading(false)
-
-
-        const passwordDecrypted = await decryptPassword(password)
-
-        console.log(passwordDecrypted)
-
-        await loginUser(username, passwordDecrypted)
-
-        navigate('/home')
-
-        setIsAuthenticated(true)
-       
         stopPolling()
       } else {
         setIsLoading(false)
@@ -117,7 +101,7 @@ export const useAuthActions = () => {
     }
   }
 
-  const startPolling = () => {
+  const startPolling = (loginToken: string) => {
     if (pollingInterval) return
     pollingInterval = setInterval(() => {
       const { loginToken: currentToken, isAuthenticated } = useAuthState.getState()
@@ -126,7 +110,7 @@ export const useAuthActions = () => {
       } else {
         stopPolling()
       }
-    }, 19000)
+    }, 10000)
   }
 
   const stopPolling = () => {

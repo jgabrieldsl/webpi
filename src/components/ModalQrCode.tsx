@@ -42,7 +42,6 @@ const ModalQrCode: React.FC<ModalQrCodeProps> = ({
     return () => {
       resetAuthState()
     }
-    // eslint-disable-next-line
   }, [isModalOpen])
 
   const handleOpenChange = (open: boolean) => {
