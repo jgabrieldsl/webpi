@@ -13,7 +13,7 @@ export interface WelcomeTextProps {
   description: string
 }
 
-export interface SuperIDAppButtonProps {
+export interface ModalQrCodeProps {
   iconSrc: string
   buttonText: string
   dialogTitle: string

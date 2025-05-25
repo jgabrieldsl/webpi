@@ -4,7 +4,7 @@ import {
   LeftSidePanel,
   Logo,
   WelcomeText,
-  SuperIDAppButton,
+  ModalQrCode,
   InputField,
   PasswordInput,
   SubmitButton,
@@ -26,7 +26,7 @@ function App() {
                 title="Bem vindo de volta ao SuperID Web"
                 description="Faça o login para continuar"
               />
-              <SuperIDAppButton
+              <ModalQrCode
                 iconSrc="/ic_launcher-playstore 2.png"
                 buttonText="Continuar com Super ID App"
                 dialogTitle="Login fácil, entre com o SuperID App"
