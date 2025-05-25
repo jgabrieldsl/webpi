@@ -46,7 +46,7 @@ export const useAuthActions = () => {
           const code = jsQR(imageData.data, imageData.width, imageData.height)
           if (code) {
             setLoginToken(code.data)
-            startPolling(code.data)
+            startPolling()
           } else {
             setError('Falha ao extrair loginToken do QR Code')
             setIsLoading(false)
@@ -101,7 +101,7 @@ export const useAuthActions = () => {
     }
   }
 
-  const startPolling = (loginToken: string) => {
+  const startPolling = () => {
     if (pollingInterval) return
     pollingInterval = setInterval(() => {
       const { loginToken: currentToken, isAuthenticated } = useAuthState.getState()
@@ -110,7 +110,7 @@ export const useAuthActions = () => {
       } else {
         stopPolling()
       }
-    }, 10000)
+    }, 19000)
   }
 
   const stopPolling = () => {
