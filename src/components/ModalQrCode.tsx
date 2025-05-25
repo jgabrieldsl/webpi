@@ -42,7 +42,7 @@ const ModalQrCode: React.FC<ModalQrCodeProps> = ({
     return () => {
       resetAuthState()
     }
-  }, [isModalOpen])
+  }, [isModalOpen, apiKey, generateQRCode, partnerSite, resetAuthState])
 
   const handleOpenChange = (open: boolean) => {
     setIsModalOpen(open)

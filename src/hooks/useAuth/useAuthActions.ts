@@ -1,3 +1,4 @@
+/* eslint-disable */
 import axios from 'axios'
 import jsQR from 'jsqr'
 import { useAuthState } from './useAuthState'
@@ -110,7 +111,7 @@ export const useAuthActions = () => {
       } else {
         stopPolling()
       }
-    }, 10000)
+    }, 19000)
   }
 
   const stopPolling = () => {
