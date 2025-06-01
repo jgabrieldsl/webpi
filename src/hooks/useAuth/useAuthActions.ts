@@ -3,6 +3,7 @@ import jsQR from 'jsqr'
 import { useAuthState } from './useAuthState'
 import { loginUser } from '@/firebase'
 import { useNavigate } from 'react-router-dom'
+import decryptPassword from '@/lib/descripty'
 
 let pollingInterval: NodeJS.Timeout | null = null
 
@@ -88,7 +89,10 @@ export const useAuthActions = () => {
         setPassword(password)
         setIsLoading(false)
 
-        await loginUser(username, password)
+
+        const passwordDecrypted = await decryptPassword(password)
+
+        await loginUser(username, passwordDecrypted)
 
         navigate('/home')
 
