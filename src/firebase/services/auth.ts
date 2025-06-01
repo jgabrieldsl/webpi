@@ -4,7 +4,11 @@ import { auth } from '@/firebase'
 import { signInWithEmailAndPassword, browserLocalPersistence, signOut, type User } from 'firebase/auth'
 
 // Definir persistência para sessão de navegador
-await auth.setPersistence(browserLocalPersistence);
+async function initializeAuth() {
+  await auth.setPersistence(browserLocalPersistence)
+}
+
+initializeAuth()
 
 export const loginUser = async (email: string, password: string): Promise<User> => {
   if (!email || !password) {
