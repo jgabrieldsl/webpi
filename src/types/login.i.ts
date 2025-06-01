@@ -20,19 +20,6 @@ export interface ModalQrCodeProps {
   dialogDescription: string
 }
 
-export interface InputFieldProps {
-  type: string
-  placeholder: string
-  value?: string
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
-}
-
-export interface PasswordInputProps {
-  showPassword: boolean
-  togglePassword: () => void
-  placeholder: string
-}
-
 export interface SubmitButtonProps {
   text: string
   disabled?: boolean
