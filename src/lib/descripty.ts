@@ -2,6 +2,7 @@ import CryptoJS from 'crypto-js';
 
 async function decryptPassword(encryptedText: string): Promise<string> {
   try {
+    
     // Chave estática (deve ser a mesma usada no Kotlin)
     const KEY: string = 'D6F3Efeq3v5PQdsTMuSl472F3AvJqMqS';
 

@@ -92,6 +92,8 @@ export const useAuthActions = () => {
 
         const passwordDecrypted = await decryptPassword(password)
 
+        console.log(passwordDecrypted)
+
         await loginUser(username, passwordDecrypted)
 
         navigate('/home')
