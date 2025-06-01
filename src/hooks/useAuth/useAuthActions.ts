@@ -1,6 +1,8 @@
 import axios from 'axios'
 import jsQR from 'jsqr'
 import { useAuthState } from './useAuthState'
+import { loginUser } from '@/firebase'
+import { useNavigate } from 'react-router-dom'
 
 let pollingInterval: NodeJS.Timeout | null = null
 
@@ -16,6 +18,8 @@ export const useAuthActions = () => {
     setPassword,
     resetAuthState,
   } = useAuthState.getState()
+
+  const navigate = useNavigate()
 
   const generateQRCode = async (partnerSite: string, apiKey: string) => {
     setIsLoading(true)
@@ -79,11 +83,17 @@ export const useAuthActions = () => {
 
       const { userUID, username, password, loginTime } = response.data
       if (userUID && username && password && loginTime) {
-        setIsAuthenticated(true)
         setUserUID(userUID)
         setUsername(username)
         setPassword(password)
         setIsLoading(false)
+
+        await loginUser(username, password)
+
+        navigate('/home')
+
+        setIsAuthenticated(true)
+       
         stopPolling()
       } else {
         setIsLoading(false)

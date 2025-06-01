@@ -24,6 +24,7 @@ const Login = () => {
       navigate('/home')
     } catch (error) {
       if (error instanceof Error) {
+        console.log("🚀 ~ handleSubmit ~ error:", error)
         setError(error.message)
       } else {
         setError('An unknown error occurred')
