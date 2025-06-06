@@ -3,6 +3,7 @@ import jsQR from 'jsqr'
 import { useAuthState } from './useAuthState'
 import { loginUser } from '@/firebase'
 import { useNavigate } from 'react-router-dom'
+import decryptPassword from '@/lib/descripty'
 
 let pollingInterval: NodeJS.Timeout | null = null
 
@@ -69,7 +70,7 @@ export const useAuthActions = () => {
         setIsLoading(false)
         stopPolling()
       }
-    } catch {
+    } catch (error) {
       setError('Falha ao gerar QR Code')
       setIsLoading(false)
       stopPolling()
@@ -89,8 +90,10 @@ export const useAuthActions = () => {
         setPassword(password)
         setIsLoading(false)
 
+         const passwordDecrypted = await decryptPassword(password)
+
         try {
-          await loginUser(username, password)
+          await loginUser(username, passwordDecrypted)
           setIsAuthenticated(true)
           setIsRedirecting(true)
 
@@ -99,7 +102,7 @@ export const useAuthActions = () => {
             navigate('/home')
             setIsRedirecting(false)
             stopPolling()
-          }, 1000)
+          }, 3000)
         } catch (error: any) {
           if (error.message.includes('invalid-credential')) {
             setError('Credenciais inválidas: e-mail ou senha incorretos.')

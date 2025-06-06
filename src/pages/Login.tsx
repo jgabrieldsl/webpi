@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   LeftSidePanel,
   Logo,
@@ -8,8 +8,9 @@ import {
   RegisterLink,
 } from '@/components'
 import { useNavigate } from 'react-router-dom'
-import { loginUser } from '@/firebase'
+import { auth, loginUser } from '@/firebase'
 import { useAuthState } from '@/hooks/useAuth'
+import { onAuthStateChanged } from 'firebase/auth'
 
 const Login = () => {
   const {
@@ -24,6 +25,18 @@ const Login = () => {
 
   const [ username, setUsername ] = useState('')
   const [ password, setPassword ] = useState('')
+
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setTimeout(() => {
+          navigate('/home')
+        }, 0)
+      }
+    })
+    return () => unsubscribe()
+  }, [ navigate ])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
