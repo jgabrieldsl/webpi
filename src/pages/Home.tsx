@@ -1,5 +1,5 @@
-import { useNavigate } from "react-router-dom"
 import { useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 import { auth, logoutUser } from "@/firebase"
 import { onAuthStateChanged } from "firebase/auth"
 import { useAuthState } from "@/hooks/useAuth"
@@ -10,19 +10,35 @@ export default function Home() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    setIsLoading(true)
+    setIsLoading(true) 
+    const startTime = Date.now()
 
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setTimeout(() => {
+      const elapsedTime = Date.now() - startTime
+      const minDelay = 2700
+
+      const handleNavigation = () => {
         if (user) {
-          setUsername(user.displayName || "Usuário")
+          setUsername(username || user.email || "Usuário")
+          setIsLoading(false)
+        } else {
+          setIsLoading(false)
+          navigate("/")
         }
-        setIsLoading(false)
-      }, 2700)
+      }
+
+      if (elapsedTime < minDelay) {
+        const remainingTime = minDelay - elapsedTime
+        setTimeout(handleNavigation, remainingTime)
+      } else {
+        handleNavigation()
+      }
     })
 
-    return () => unsubscribe()
-  }, [setUsername, setIsLoading])
+    return () => {
+      unsubscribe()
+    }
+  }, [navigate, setUsername, setIsLoading])
 
   const handleLogout = async () => {
     try {
