@@ -1,4 +1,4 @@
-import type { RegisterLinkProps } from '@/types/login.i'
+import type { RegisterLinkProps } from '@/types'
 
 const RegisterLink: React.FC<RegisterLinkProps> = ({ text, linkText, linkHref }) => (
   <div className="flex items-center justify-center gap-2 mt-16 md:mt-24 text-base text-center">

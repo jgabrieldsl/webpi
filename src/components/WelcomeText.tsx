@@ -1,4 +1,4 @@
-import type { WelcomeTextProps } from '@/types/login.i'
+import type { WelcomeTextProps } from '@/types'
 
 const WelcomeText: React.FC<WelcomeTextProps> = ({ title, description }) => (
   <div className="flex flex-col items-stretch justify-center self-start mb-8">

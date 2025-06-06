@@ -1,4 +1,4 @@
-import type { LeftSidePanelProps } from '@/types/login.i'
+import type { LeftSidePanelProps } from '@/types'
 
 const LeftSidePanel: React.FC<LeftSidePanelProps> = ({ backgroundColor = '#4500C9' }) => (
   <div className="hidden md:flex w-full md:w-1/2">
