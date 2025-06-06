@@ -69,7 +69,7 @@ export const useAuthActions = () => {
         setIsLoading(false)
         stopPolling()
       }
-    } catch (error) {
+    } catch {
       setError('Falha ao gerar QR Code')
       setIsLoading(false)
       stopPolling()

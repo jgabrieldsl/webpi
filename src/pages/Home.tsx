@@ -1,11 +1,28 @@
 import { useNavigate } from "react-router-dom"
-import { logoutUser } from "@/firebase"
+import { useEffect } from "react"
+import { auth, logoutUser } from "@/firebase"
+import { onAuthStateChanged } from "firebase/auth"
 import { useAuthState } from "@/hooks/useAuth"
 import { Loader } from "@/components"
 
 export default function Home() {
-  const { username, isLoading } = useAuthState()
+  const { username, setUsername, isLoading, setIsLoading } = useAuthState()
   const navigate = useNavigate()
+
+  useEffect(() => {
+    setIsLoading(true)
+
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setTimeout(() => {
+        if (user) {
+          setUsername(user.displayName || "Usuário")
+        }
+        setIsLoading(false)
+      }, 2700)
+    })
+
+    return () => unsubscribe()
+  }, [setUsername, setIsLoading])
 
   const handleLogout = async () => {
     try {
