@@ -16,6 +16,7 @@ export const useAuthActions = () => {
     setUserUID,
     setUsername,
     setPassword,
+    setIsRedirecting,
     resetAuthState,
   } = useAuthState.getState()
 
@@ -88,13 +89,26 @@ export const useAuthActions = () => {
         setPassword(password)
         setIsLoading(false)
 
-        await loginUser(username, password)
+        try {
+          await loginUser(username, password)
+          setIsAuthenticated(true)
+          setIsRedirecting(true)
 
-        navigate('/home')
-
-        setIsAuthenticated(true)
-       
-        stopPolling()
+          // Delay para navegar para a home
+          setTimeout(() => {
+            navigate('/home')
+            setIsRedirecting(false)
+            stopPolling()
+          }, 1000)
+        } catch (error: any) {
+          if (error.message.includes('invalid-credential')) {
+            setError('Credenciais inválidas: e-mail ou senha incorretos.')
+          } else {
+            setError(error.message)
+          }
+          setIsLoading(false)
+          stopPolling()
+        }
       } else {
         setIsLoading(false)
       }

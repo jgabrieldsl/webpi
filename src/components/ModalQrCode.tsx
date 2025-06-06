@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
-import { useAuthState } from '@/hooks/useAuth/useAuthState'
-import { useAuthActions } from '@/hooks/useAuth/useAuthActions'
-import type { ModalQrCodeProps } from '@/types/login.i'
+import { useAuthActions, useAuthState } from '@/hooks/useAuth'
+import type { ModalQrCodeProps } from '@/types'
 
 import {
   Dialog,
@@ -25,8 +24,8 @@ const ModalQrCode: React.FC<ModalQrCodeProps> = ({
     isLoading,
     isAuthenticated,
     error,
-    userUID,
     username,
+    isRedirecting,
   } = useAuthState()
 
   const { generateQRCode, resetAuthState } = useAuthActions()
@@ -50,7 +49,7 @@ const ModalQrCode: React.FC<ModalQrCodeProps> = ({
   }
 
   return (
-    <Dialog onOpenChange={handleOpenChange}>
+    <Dialog open={isModalOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <button
           className="flex items-center justify-center gap-3 w-full px-8 py-3 text-base text-center text-[#8391A1] font-normal border border-solid border-[#4600c9] rounded-full"
@@ -72,11 +71,22 @@ const ModalQrCode: React.FC<ModalQrCodeProps> = ({
 
         <div className="flex flex-col items-center justify-center">
           {isAuthenticated ? (
-            <div className="text-center">
-              <p className="text-green-500">Login bem-sucedido!</p>
-              <p>Usuário: {username}</p>
-              <p>UID: {userUID}</p>
-            </div>
+            isRedirecting ? (
+              <div className="text-center">
+                <p className="text-green-500 text-lg font-semibold">Login bem-sucedido!</p>
+                <p>Usuário: {username}</p>
+                <div className="mt-4">
+                  <p className="mt-2">Redirecionando para a página inicial...</p>
+                </div>
+              </div>
+            ) : (
+              <div className="text-center">
+                <p className="text-green-500 text-lg font-semibold">Login bem-sucedido!</p>
+                <p>Usuário: {username}</p>
+              </div>
+            )
+          ) : error ? (
+            <p className="text-red-500 text-center">{error}</p>
           ) : qrCode ? (
             <>
               <img src={qrCode} alt="QR Code" className="w-48 h-48 mb-4" />
@@ -85,7 +95,6 @@ const ModalQrCode: React.FC<ModalQrCodeProps> = ({
           ) : (
             <p className="text-center">Gerando QR Code...</p>
           )}
-          {error && <p className="text-red-500 text-center">{error}</p>}
         </div>
       </DialogContent>
     </Dialog>

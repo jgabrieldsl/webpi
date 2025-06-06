@@ -9,25 +9,41 @@ import {
 } from '@/components'
 import { useNavigate } from 'react-router-dom'
 import { loginUser } from '@/firebase'
+import { useAuthState } from '@/hooks/useAuth'
 
 const Login = () => {
-  const [showPassword, setShowPassword] = useState(false)
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-  const navigate = useNavigate()
+  const {
+    error,
+    setError,
+    isLoadingAuth,
+    setIsLoadingAuth
+  } = useAuthState()
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault(); // Previne o comportamento padrão do formulário
+  const navigate = useNavigate()
+  const [showPassword, setShowPassword] = useState(false)
+
+  const [ username, setUsername ] = useState('')
+  const [ password, setPassword ] = useState('')
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError('')
+    if (!username || !password) {
+      setError('Por favor, preencha e-mail e senha.')
+      return
+    }
     try {
-      await loginUser(email, password)
+      setIsLoadingAuth(true)
+      await loginUser(username, password)
       navigate('/home')
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message)
       } else {
-        setError('An unknown error occurred')
+        setError('Erro desconhecido.')
       }
+    } finally {
+      setIsLoadingAuth(false)
     }
   }
 
@@ -62,18 +78,18 @@ const Login = () => {
                   type="email"
                   placeholder="E-mail"
                   required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)} // Atualiza o estado do e-mail
+                  value={username || ''}
+                  onChange={(e) => setUsername(e.target.value)}
                   className="w-full text-[15px] text-[#8391A1] font-medium rounded-full border border-[#E8ECF4] bg-[#F7F8F9] px-6 py-4 outline-none"
                 />
                 <div className="mt-4 w-full">
                   <div className="relative w-full">
                     <input
-                      type={showPassword ? 'text' : 'password'} // Corrige a lógica do showPassword
+                      type={showPassword ? 'text' : 'password'}
                       placeholder="Senha"
                       required
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)} // Atualiza o estado da senha
+                      value={password || ''}
+                      onChange={(e) => setPassword(e.target.value)}
                       className="w-full text-[15px] text-[#8391A1] font-medium rounded-full border border-[#E8ECF4] bg-[#F7F8F9] px-6 py-4 outline-none"
                     />
                     <button
@@ -82,7 +98,7 @@ const Login = () => {
                       onClick={() => setShowPassword(!showPassword)}
                     >
                       <img
-                        src={showPassword ? '/eyeicon.png' : '/ic_launcher-playstore 2.png'}
+                        src={showPassword ? '/eyeicon-closed.png' : '/eyeicon.png'}
                         className="w-5 h-5 object-contain"
                         alt="Show/Hide Password"
                       />
@@ -94,7 +110,7 @@ const Login = () => {
                     </a>
                   </div>
                 </div>
-                <SubmitButton text="Entrar" />
+                <SubmitButton text={isLoadingAuth ? 'Carregando...' : 'Entrar'} />
               </form>
               <RegisterLink
                 text="Não tem uma conta?"

@@ -10,7 +10,7 @@ async function initializeAuth() {
 
 initializeAuth()
 
-export const loginUser = async (email: string, password: string): Promise<User> => {
+export const loginUser = async (email: string, password: string): Promise<User | undefined> => {
   if (!email || !password) {
     throw new Error('E-mail e senha são obrigatórios')
   }
@@ -19,10 +19,13 @@ export const loginUser = async (email: string, password: string): Promise<User> 
     return userCredential.user
   } catch (error) {
     if (error instanceof Error) {
-      throw new Error(`Erro ao fazer login: ${error.message}`)
+      if (error.message.includes('invalid-credential')) {
+        throw new Error('Credenciais inválidas: e-mail ou senha incorretos.')
+      }
     } else {
       throw new Error('Erro ao fazer login: Erro desconhecido')
     }
+    return undefined
   }
 }
 
