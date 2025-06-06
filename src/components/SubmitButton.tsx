@@ -1,4 +1,4 @@
-import type { SubmitButtonProps } from '@/types/login.i'
+import type { SubmitButtonProps } from '@/types'
 
 const SubmitButton: React.FC<SubmitButtonProps> = ({ text, disabled, onClick }) => (
   <button

@@ -1,6 +1,9 @@
 import axios from 'axios'
 import jsQR from 'jsqr'
 import { useAuthState } from './useAuthState'
+import { loginUser } from '@/firebase'
+import { useNavigate } from 'react-router-dom'
+import decryptPassword from '@/lib/descripty'
 
 let pollingInterval: NodeJS.Timeout | null = null
 
@@ -14,8 +17,11 @@ export const useAuthActions = () => {
     setUserUID,
     setUsername,
     setPassword,
+    setIsRedirecting,
     resetAuthState,
   } = useAuthState.getState()
+
+  const navigate = useNavigate()
 
   const generateQRCode = async (partnerSite: string, apiKey: string) => {
     setIsLoading(true)
@@ -64,7 +70,7 @@ export const useAuthActions = () => {
         setIsLoading(false)
         stopPolling()
       }
-    } catch (error) {
+    } catch {
       setError('Falha ao gerar QR Code')
       setIsLoading(false)
       stopPolling()
@@ -79,12 +85,33 @@ export const useAuthActions = () => {
 
       const { userUID, username, password, loginTime } = response.data
       if (userUID && username && password && loginTime) {
-        setIsAuthenticated(true)
         setUserUID(userUID)
         setUsername(username)
         setPassword(password)
         setIsLoading(false)
-        stopPolling()
+
+         const passwordDecrypted = await decryptPassword(password)
+
+        try {
+          await loginUser(username, passwordDecrypted)
+          setIsAuthenticated(true)
+          setIsRedirecting(true)
+
+          // Delay para navegar para a home
+          setTimeout(() => {
+            navigate('/home')
+            setIsRedirecting(false)
+            stopPolling()
+          }, 3000)
+        } catch (error: any) {
+          if (error.message.includes('invalid-credential')) {
+            setError('Credenciais inválidas: e-mail ou senha incorretos.')
+          } else {
+            setError(error.message)
+          }
+          setIsLoading(false)
+          stopPolling()
+        }
       } else {
         setIsLoading(false)
       }

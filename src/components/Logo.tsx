@@ -1,4 +1,4 @@
-import type { LogoProps } from '@/types/login.i'
+import type { LogoProps } from '@/types'
 
 const Logo: React.FC<LogoProps> = ({ src, size = 'w-24 h-24', alt }) => (
   <img
